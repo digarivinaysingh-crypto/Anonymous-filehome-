@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anonymous Filehome</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:#f5f5f5;
+    text-align:center;
+    padding:20px;
+}
+.container{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    max-width:700px;
+    margin:auto;
+}
+button{
+    padding:10px 20px;
+    margin:10px;
+    cursor:pointer;
+}
+.file{
+    margin:10px;
+    padding:10px;
+    background:#eee;
+    border-radius:5px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>Anonymous Filehome</h1>
+
+<input type="password" id="password" placeholder="Upload Password">
+<br><br>
+
+<input type="file" id="fileInput">
+<br>
+
+<button onclick="uploadFile()">Upload</button>
+
+<hr>
+
+<h2>Available Files</h2>
+<div id="files"></div>
+
+</div>
+
+<script>
+
+const PASSWORD = "ChooseYourStrongPasswordHere";
+
+const supabaseUrl =
+"https://vpdavlfywcvnfkxjarlo.supabase.co";
+
+const supabaseKey =
+"PASTE_YOUR_ANON_KEY_HERE";
+
+const supabase =
+window.supabase.createClient(
+supabaseUrl,
+supabaseKey
+);
+
+async function uploadFile(){
+
+const entered =
+document.getElementById("password").value;
+
+if(entered !== PASSWORD){
+alert("Wrong password");
+return;
+}
+
+const file =
+document.getElementById("fileInput").files[0];
+
+if(!file){
+alert("Select a file");
+return;
+}
+
+const fileName =
+Date.now()+"_"+file.name;
+
+const { error } =
+await supabase.storage
+.from("Files")
+.upload(fileName,file);
+
+if(error){
+alert(error.message);
+return;
+}
+
+alert("Upload successful");
+
+loadFiles();
+}
+
+async function loadFiles(){
+
+const { data,error } =
+await supabase.storage
+.from("Files")
+.list();
+
+if(error){
+console.log(error);
+return;
+}
+
+let html="";
+
+data.forEach(file=>{
+
+const url =
+`${supabaseUrl}/storage/v1/object/public/Files/${file.name}`;
+
+html += `
+<div class="file">
+${file.name}
+<br>
+<a href="${url}" target="_blank">
+Download
+</a>
+</div>
+`;
+
+});
+
+document.getElementById("files").innerHTML = html;
+}
+
+loadFiles();
+
+</script>
+
+</body>
+  </html>
