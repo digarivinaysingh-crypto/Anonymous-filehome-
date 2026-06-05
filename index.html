@@ -45,7 +45,7 @@ button{
 <input type="file" id="fileInput">
 <br>
 
-<button onclick="alert('TEST')">Upload</button>
+<button onclick="uploadFile()">Upload</button>
 <h2>Available Files</h2>
 <div id="files"></div>
 
@@ -68,15 +68,18 @@ supabaseKey
 );
 
 async function uploadFile(){
-alert("uploadFile started");
-    
+
+alert("Step 1");
+
 const entered =
 document.getElementById("password").value;
+
+alert("Step 2");
 
 if(entered !== PASSWORD){
 alert("Wrong password");
 return;
-}
+    }
 
 const file =
 document.getElementById("fileInput").files[0];
