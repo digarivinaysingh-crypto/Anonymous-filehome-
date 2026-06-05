@@ -90,7 +90,7 @@ Date.now()+"_"+file.name;
 
 const { error } = await supabase.storage
 .from("Files")
-.upload(file.name, file);
+.upload(filename, file);
 
 if(error){
   alert(error.message);
@@ -98,13 +98,6 @@ if(error){
 }
 
 alert("Upload successful!");
-
-if(error){
-alert(error.message);
-return;
-}
-
-alert("Upload successful");
 
 loadFiles();
 }
