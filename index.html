@@ -90,7 +90,7 @@ Date.now()+"_"+file.name;
 
 const { error } = await supabase.storage
 .from("Files")
-.upload(filename, file);
+.upload(fileName, file);
 
 if(error){
   alert(error.message);
