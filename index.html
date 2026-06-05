@@ -88,10 +88,16 @@ return;
 const fileName =
 Date.now()+"_"+file.name;
 
-const { error } =
-await supabase.storage
+const { error } = await supabase.storage
 .from("Files")
-.upload(fileName,file);
+.upload(file.name, file);
+
+if(error){
+  alert(error.message);
+  return;
+}
+
+alert("Upload successful!");
 
 if(error){
 alert(error.message);
